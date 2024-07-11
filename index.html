@@ -5,9 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sats to Fiat Converter</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .converter { max-width: 400px; margin: auto; text-align: center; }
-        .input { margin-bottom: 20px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .converter { 
+            max-width: 400px; 
+            margin: 40px auto; 
+            padding: 20px; 
+            background: #fff; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            border-radius: 8px; 
+            text-align: center; 
+        }
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 20px; 
+        }
+        .input { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+        }
+        input[type="number"] { 
+            width: calc(100% - 22px); 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            color: #fff; 
+            background-color: #007bff; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease; 
+        }
+        button:hover { 
+            background-color: #0056b3; 
+        }
+        #results p { 
+            margin: 10px 0; 
+            font-size: 18px; 
+        }
     </style>
 </head>
 <body>
