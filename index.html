@@ -55,7 +55,8 @@
             margin-right: 10px;
             font-weight: bold;
         }
-        .input-group input {
+        .input-group input,
+        .input-group select {
             flex: 2;
             padding: 10px;
             font-size: 16px;
@@ -89,10 +90,28 @@
         </div>
         <div class="converter-body">
             <div class="input-group">
-                <label for="sats">Sats:</label>
-                <input type="number" id="sats" placeholder="Enter amount in Sats">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount">
             </div>
-            <button class="convert-button" onclick="convertSats()">Convert</button>
+            <div class="input-group">
+                <label for="from-currency">From:</label>
+                <select id="from-currency">
+                    <option value="sats">Sats</option>
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">GBP</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="to-currency">To:</label>
+                <select id="to-currency">
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">GBP</option>
+                    <option value="sats">Sats</option>
+                </select>
+            </div>
+            <button class="convert-button" onclick="convert()">Convert</button>
         </div>
         <div class="results" id="results"></div>
     </div>
@@ -104,21 +123,47 @@
             return data.bitcoin;
         }
 
-        async function convertSats() {
-            const sats = document.getElementById('sats').value;
+        async function convert() {
+            const amount = document.getElementById('amount').value;
+            const fromCurrency = document.getElementById('from-currency').value;
+            const toCurrency = document.getElementById('to-currency').value;
             const bitcoinPrices = await getBitcoinPrice();
 
-            const satToBtc = sats / 100000000;
-
-            const usd = (satToBtc * bitcoinPrices.usd).toFixed(2);
-            const eur = (satToBtc * bitcoinPrices.eur).toFixed(2);
-            const gbp = (satToBtc * bitcoinPrices.gbp).toFixed(2);
+            let result = 0;
+            if (fromCurrency === 'sats') {
+                const satToBtc = amount / 100000000;
+                if (toCurrency === 'usd') {
+                    result = (satToBtc * bitcoinPrices.usd).toFixed(2);
+                } else if (toCurrency === 'eur') {
+                    result = (satToBtc * bitcoinPrices.eur).toFixed(2);
+                } else if (toCurrency === 'gbp') {
+                    result = (satToBtc * bitcoinPrices.gbp).toFixed(2);
+                } else {
+                    result = amount;
+                }
+            } else {
+                let btcToSats = 0;
+                if (fromCurrency === 'usd') {
+                    btcToSats = amount / bitcoinPrices.usd;
+                } else if (fromCurrency === 'eur') {
+                    btcToSats = amount / bitcoinPrices.eur;
+                } else if (fromCurrency === 'gbp') {
+                    btcToSats = amount / bitcoinPrices.gbp;
+                }
+                if (toCurrency === 'sats') {
+                    result = (btcToSats * 100000000).toFixed(0);
+                } else if (toCurrency === 'usd') {
+                    result = (btcToSats * bitcoinPrices.usd).toFixed(2);
+                } else if (toCurrency === 'eur') {
+                    result = (btcToSats * bitcoinPrices.eur).toFixed(2);
+                } else if (toCurrency === 'gbp') {
+                    result = (btcToSats * bitcoinPrices.gbp).toFixed(2);
+                }
+            }
 
             document.getElementById('results').innerHTML = `
-                <p>${sats} sats is approximately:</p>
-                <p><strong>${usd} USD</strong></p>
-                <p><strong>${eur} EUR</strong></p>
-                <p><strong>${gbp} GBP</strong></p>
+                <p>${amount} ${fromCurrency.toUpperCase()} is approximately:</p>
+                <p><strong>${result} ${toCurrency.toUpperCase()}</strong></p>
             `;
         }
     </script>
