@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: transparent; /* Make background transparent */
             color: #333;
             margin: 0;
             padding: 0;
@@ -19,7 +19,7 @@
         .converter-container {
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More prominent shadow */
             max-width: 500px;
             width: 100%;
             padding: 20px;
@@ -123,6 +123,10 @@
             return data.bitcoin;
         }
 
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         async function convert() {
             const amount = document.getElementById('amount').value;
             const fromCurrency = document.getElementById('from-currency').value;
@@ -139,7 +143,7 @@
                 } else if (toCurrency === 'gbp') {
                     result = (satToBtc * bitcoinPrices.gbp).toFixed(2);
                 } else {
-                    result = amount;
+                    result = numberWithCommas(amount);
                 }
             } else {
                 let btcToSats = 0;
@@ -151,7 +155,7 @@
                     btcToSats = amount / bitcoinPrices.gbp;
                 }
                 if (toCurrency === 'sats') {
-                    result = (btcToSats * 100000000).toFixed(0);
+                    result = numberWithCommas((btcToSats * 100000000).toFixed(0));
                 } else if (toCurrency === 'usd') {
                     result = (btcToSats * bitcoinPrices.usd).toFixed(2);
                 } else if (toCurrency === 'eur') {
